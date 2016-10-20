@@ -96,7 +96,7 @@ $app->get('/dbupdate/', function() use($app) {
   //$st = $app['pdo']->prepare('SELECT name FROM test_table');
   //$st->execute();
 
-  $st = $app['pdo']->prepare('SELECT forecast_date FROM forecasts');
+  $st = $app['pdo']->prepare('SELECT forecast_json FROM forecasts');
   $st->execute();
 /*
   $names = array();
@@ -108,7 +108,7 @@ $app->get('/dbupdate/', function() use($app) {
 
   $names = array();
   while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
-    $app['monolog']->addDebug('Row ' . $row['forecast_date'] . ' | ' );
+    $app['monolog']->addDebug('Row ' . $row['forecast_json'] . ' | ' );
     $names[] = $row;
   }
 
