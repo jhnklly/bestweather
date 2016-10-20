@@ -79,6 +79,9 @@ $app->get('/dbupdate/', function() use($app) {
     https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
   */
 
+  error_log("test");
+  error_log($url);
+
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -87,6 +90,8 @@ $app->get('/dbupdate/', function() use($app) {
   curl_close($ch);
 
   $forecast_json = json_decode($result);
+  error_log("$forecast_json");
+
   //echo $result->access_token;
 /*
   Only do this if doesn't yet exist for today:
