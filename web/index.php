@@ -68,29 +68,46 @@ $app->get('/db/', function() use($app) {
 $app->get('/dbupdate/', function() use($app) {
 
   date_default_timezone_set('America/Los_Angeles');
-  $date = date('Y-m-d');
+  $date = date('Y-m-d', time());
   $APIKEY = "86f515c3f0103714bc87cfc7910bcdc5";
   $latLonTime = [38,-121,1476985813];
 
   //$url = "proxy.php?url=" . encodeURIComponent( "https://api.forecast.io/forecast/" . $APIKEY . "/" . $latLonTime.join(",") );
   $url = "proxy.php?url=" . encodeURIComponent( "https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813" );
-/*
-  nowTime = Math.floor((new Date()).getTime() / 1000); // 1476985813
-  https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
-*/
+  /*
+    nowTime = Math.floor((new Date()).getTime() / 1000); // 1476985813
+    https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
+  */
 
-  $sql = $pdo->prepare("INSERT INTO forecasts(forecast_date, forecast_json) VALUES(?, ?)");
-  $sql->execute(array($forecast_date, $forecast_json));
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_URL, $url);
+  $result = curl_exec($ch);
+  curl_close($ch);
 
+  $forecast_json = json_decode($result);
+  //echo $result->access_token;
 
   $st = $app['pdo']->prepare('INSERT INTO forecasts(forecast_date, forecast_json) VALUES(?, ?)');
+  $st->execute(array($date, $forecast_json));
 
   //$st = $app['pdo']->prepare('SELECT name FROM test_table');
-  $st->execute();
+  //$st->execute();
 
+  $st = $app['pdo']->prepare('SELECT forecast_date, forecast_json FROM forecasts');
+  $st->execute();
+/*
   $names = array();
   while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
     $app['monolog']->addDebug('Row ' . $row['name']);
+    $names[] = $row;
+  }
+*/
+
+  $names = array();
+  while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+    $app['monolog']->addDebug('Row ' . $row['forecast_date'] . ' | ' . $row['forecast_json']);
     $names[] = $row;
   }
 
