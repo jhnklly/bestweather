@@ -73,7 +73,7 @@ $app->get('/dbupdate/', function() use($app) {
   $latLonTime = [38,-121,1476985813];
 
   //$url = "proxy.php?url=" . encodeURIComponent( "https://api.forecast.io/forecast/" . $APIKEY . "/" . $latLonTime.join(",") );
-  $url = "proxy.php?url=" . encodeURIComponent( "https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813" );
+  $url = "https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813";
   /*
     nowTime = Math.floor((new Date()).getTime() / 1000); // 1476985813
     https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
