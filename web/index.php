@@ -5,7 +5,15 @@ require('../vendor/autoload.php');
 $app = new Silex\Application();
 $app['debug'] = true;
 
-// JMK from https://devcenter.heroku.com/articles/getting-started-with-php#provision-a-database
+/*
+JMK from https://devcenter.heroku.com/articles/getting-started-with-php#provision-a-database
+
+heroku pg:psql
+create table test_table (id integer, name text);
+create table test_table (id integer, name text);
+
+*/
+
 $dbopts = parse_url(getenv('DATABASE_URL'));
 $app->register(new Herrera\Pdo\PdoServiceProvider(),
                array(
