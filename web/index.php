@@ -10,7 +10,13 @@ JMK from https://devcenter.heroku.com/articles/getting-started-with-php#provisio
 
 heroku pg:psql
 create table test_table (id integer, name text);
-create table test_table (id integer, name text);
+CREATE TABLE forecasts (
+  --id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  id SERIAL,
+  forecast_date TIMESTAMP,
+  forecast_json TEXT
+)
+;
 
 */
 
@@ -44,6 +50,42 @@ $app->get('/', function() use($app) {
 // JMK
 $app->get('/db/', function() use($app) {
   $st = $app['pdo']->prepare('SELECT name FROM test_table');
+  $st->execute();
+
+  $names = array();
+  while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+    $app['monolog']->addDebug('Row ' . $row['name']);
+    $names[] = $row;
+  }
+
+  return $app['twig']->render('database.twig', array(
+    'names' => $names
+  ));
+});
+
+
+// JMK2
+$app->get('/dbupdate/', function() use($app) {
+
+  date_default_timezone_set('America/Los_Angeles');
+  $date = date('Y-m-d');
+  $APIKEY = "86f515c3f0103714bc87cfc7910bcdc5";
+  $latLonTime = [38,-121,1476985813];
+
+  //$url = "proxy.php?url=" . encodeURIComponent( "https://api.forecast.io/forecast/" . $APIKEY . "/" . $latLonTime.join(",") );
+  $url = "proxy.php?url=" . encodeURIComponent( "https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813" );
+/*
+  nowTime = Math.floor((new Date()).getTime() / 1000); // 1476985813
+  https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
+*/
+
+  $sql = $pdo->prepare("INSERT INTO forecasts(forecast_date, forecast_json) VALUES(?, ?)");
+  $sql->execute(array($forecast_date, $forecast_json));
+
+
+  $st = $app['pdo']->prepare('INSERT INTO forecasts(forecast_date, forecast_json) VALUES(?, ?)');
+
+  //$st = $app['pdo']->prepare('SELECT name FROM test_table');
   $st->execute();
 
   $names = array();
