@@ -88,14 +88,15 @@ $app->get('/dbupdate/', function() use($app) {
 
   $forecast_json = json_decode($result);
   //echo $result->access_token;
-
+/*
+  Only do this if doesn't yet exist for today:
   $st = $app['pdo']->prepare('INSERT INTO forecasts(forecast_date, forecast_json) VALUES(?, ?)');
   $st->execute(array($date, $forecast_json));
-
+*/
   //$st = $app['pdo']->prepare('SELECT name FROM test_table');
   //$st->execute();
 
-  $st = $app['pdo']->prepare('SELECT forecast_json FROM forecasts');
+  $st = $app['pdo']->prepare('SELECT forecast_date FROM forecasts');
   $st->execute();
 /*
   $names = array();
