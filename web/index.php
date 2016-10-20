@@ -81,13 +81,26 @@ $app->get('/dbupdate/', function() use($app) {
 
   error_log("test");
   error_log("url: " . $url);
-
+/*
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
   curl_setopt($ch, CURLOPT_URL, $url);
   $result = curl_exec($ch);
   curl_close($ch);
+*/
+
+$ch = curl_init($url);
+$pageurl=strtok($url,'?');
+error_log("pageurl: $pageurl");
+$querystring=strtok('?');
+error_log("querystring: $querystring");
+$ch_encoded=curl_escape($ch, $querystring);
+curl_setopt($ch, CURLOPT_URL, $pageurl.'?'.$ch_encoded);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$result = curl_exec($ch);
+
+  error_log("result: $result");
 
   $forecast_json = json_decode($result);
   error_log("forecast_json: $forecast_json");
