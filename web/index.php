@@ -90,9 +90,9 @@ $app->get('/dbupdate/', function() use($app) {
   //echo $result->access_token;
 /*
   Only do this if doesn't yet exist for today:
+*/
   $st = $app['pdo']->prepare('INSERT INTO forecasts(forecast_date, forecast_json) VALUES(?, ?)');
   $st->execute(array($date, $forecast_json));
-*/
   //$st = $app['pdo']->prepare('SELECT name FROM test_table');
   //$st->execute();
 
