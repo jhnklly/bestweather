@@ -92,19 +92,22 @@ $app->get('/dbupdate/', function() use($app) {
 
 $ch = curl_init($url);
 $pageurl=strtok($url,'?');
-error_log("pageurl: $pageurl");
+error_log("pageurl: $pageurl"); // https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
 $querystring=strtok('?');
-error_log("querystring: $querystring");
+error_log("querystring: $querystring"); // null
 $ch_encoded=curl_escape($ch, $querystring);
 curl_setopt($ch, CURLOPT_URL, $pageurl.'?'.$ch_encoded);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $result = curl_exec($ch);
 
-  error_log("result: $result");
-
+  $forecast_json = $result;
+  error_log("result: $result"); // {"latitude":38,"longitude":-121,"timezone":"America/Los_Angeles","offset":-7,"currently":{"time":1476985813,"summary":"Clear","icon":"clear-day","precipIntensity":0,"precipProbabil...
+/*
+  // Don't convert json to object; leave json as string for db insert.
   $forecast_json = json_decode($result);
-  error_log("forecast_json: $forecast_json");
-
+  error_log("forecast_json...");
+  error_log($forecast_json);
+*/
   //echo $result->access_token;
 /*
   Only do this if doesn't yet exist for today:
