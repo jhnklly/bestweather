@@ -66,7 +66,7 @@ $app->get('/db/', function() use($app) {
 */
 
 // JMK2
-$app->get('/db2/', function() use($app) {
+$app->get('/db/', function() use($app) {
 
   date_default_timezone_set('America/Los_Angeles');
   $date = date('Y-m-d', time());
