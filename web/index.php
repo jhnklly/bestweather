@@ -124,6 +124,8 @@ $myArr['forecast_json'] = "cast";
       //$names = array();
       foreach ($features as $i => $item) {
 
+          usleep(0.1 * 1000 * 1000); // microseconds; 923 points = 92 seconds
+
           $rowe[] = array('forecast_json' => $item['geometry']['coordinates'][0]);
           $lat = $item['geometry']['coordinates'][1];
           $lon = $item['geometry']['coordinates'][0];
