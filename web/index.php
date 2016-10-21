@@ -116,7 +116,11 @@ $myArr['forecast_json'] = "cast";
       $names[] = $rowe;
 
       $json_obj = json_decode($json_string, false);
+      var_dump($json_obj);
       $features = $json_obj['features'];
+      var_dump($features[0]);
+
+      return;
 
       //$names = array();
       foreach ($features as $i => $item) {
