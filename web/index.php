@@ -98,11 +98,12 @@ $app->get('/db/', function() use($app) {
 
       return $app['twig']->render('database.twig', array(
         //'names' => $json_string
-        'names' => "data/sfba_land_pts_64.geojson"
+        'names' => ["data/sfba_land_pts_64.geojson"]
       ));
 
       $json_obj = json_decode($string, false);
 
+      //$names = array();
       foreach ($json_obj['features'] as $i => $item) {
           echo "features: $i, " . $item['geometry']['coordinates'][0];
           var_dump($item);
