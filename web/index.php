@@ -98,7 +98,7 @@ $app->get('/db/', function() use($app) {
 
       return $app['twig']->render('database.twig', array(
         //'names' => $json_string
-        'names' => ["data/sfba_land_pts_64.geojson"]
+        'names' => ['forecast_json' => "data/sfba_land_pts_64.geojson"]
       ));
 
       $json_obj = json_decode($string, false);
