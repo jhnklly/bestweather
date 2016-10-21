@@ -101,9 +101,11 @@ How to create arrays:
 $myArr = array("key1" => 20, "otherKey" => 10);
 $myArr['key1'] = "one";
 $myArr['otherKey'] = "two";
+$myArr['forecast_json'] = "cast";
 
       $rowe = array();
-      $rowe['forecast_json'] = "data/sfba_land_pts_64.geojson";
+      //$rowe['forecast_json'] = "data/sfba_land_pts_64.geojson";
+      $rowe['forecast_json'] = "foo";
       $names = array();
       $names[] = $rowe;
       return $app['twig']->render('database.twig', array(
