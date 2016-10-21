@@ -108,7 +108,7 @@ $myArr['otherKey'] = "two";
       $names[] = $rowe;
       return $app['twig']->render('database.twig', array(
         //'names' => $json_string
-        'names' => $rowe
+        'names' => $myArr
       ));
 
       $json_obj = json_decode($string, false);
