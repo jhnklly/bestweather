@@ -89,11 +89,17 @@ $app->get('/db/', function() use($app) {
       // Get all the points of interest
       //$json_string = file_get_contents("data/sfba_land_pts_64.geojson");
 
-          //$ch = curl_init("data/sfba_land_pts_64.geojson");
-          $ch = curl_init("https://raw.githubusercontent.com/jhnklly/bestweather/master/web/data/sfba_land_pts_64.geojson");
-          curl_setopt($ch, CURLOPT_URL, "ttps://raw.githubusercontent.com/jhnklly/bestweather/master/web/data/sfba_land_pts_64.geojson");
+          $url = "https://raw.githubusercontent.com/jhnklly/bestweather/master/web/data/sfba_land_pts_64.geojson";
+          $ch = curl_init($url);
+          $pageurl=strtok($url,'?');
+          error_log("pageurl: $pageurl"); // https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
+          $querystring=strtok('?');
+          error_log("querystring: $querystring"); // null
+          $ch_encoded=curl_escape($ch, $querystring);
+          curl_setopt($ch, CURLOPT_URL, $pageurl.'?'.$ch_encoded);
           curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-          $json_string = trim(curl_exec($ch));
+          $json_string = curl_exec($ch);
+          //$json_string = trim(curl_exec($ch));
 
 /*
 How to create arrays:
@@ -104,9 +110,9 @@ $myArr['forecast_json'] = "cast";
 */
 
       $rowe = array();
-      //$rowe[] = array('forecast_json' => "data/sfba_land_pts_64.geojson");
-      $rowe['forecast_json'] = "data/sfba_land_pts_64.geojson";
-      $rowe['forecast_json'] = "any" . $json_string . "thing";
+      $rowe[] = array('forecast_json' => $json_string);
+      //$rowe['forecast_json'] = "data/sfba_land_pts_64.geojson";
+      //$rowe['forecast_json'] = "any" . $json_string . "thing";
       //$rowe[] = ['forecast_json' = "data/sfba_land_pts_64.geojson"];
       $names = array();
       $names[] = $rowe;
