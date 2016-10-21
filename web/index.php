@@ -95,10 +95,20 @@ $app->get('/db/', function() use($app) {
           curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
           $json_string = trim(curl_exec($ch));
 
+/*
+How to create arrays:
+*/
+$myArr = array("key1" => 20, "otherKey" => 10);
+$myArr['key1'] = "one";
+$myArr['otherKey'] = "two";
 
+      $rowe = array();
+      $rowe['forecast_json'] = "data/sfba_land_pts_64.geojson";
+      $names = array();
+      $names[] = $rowe;
       return $app['twig']->render('database.twig', array(
         //'names' => $json_string
-        'names' => ['forecast_json' => "data/sfba_land_pts_64.geojson"]
+        'names' => $rowe
       ));
 
       $json_obj = json_decode($string, false);
