@@ -97,16 +97,16 @@ $app->get('/db/', function() use($app) {
 
 /*
 How to create arrays:
-*/
 $myArr = array("key1" => 20, "otherKey" => 10);
 $myArr['key1'] = "one";
 $myArr['otherKey'] = "two";
 $myArr['forecast_json'] = "cast";
+*/
 
       $rowe = array();
-      $rowe[] = array('forecast_json' => "data/sfba_land_pts_64.geojson");
+      //$rowe[] = array('forecast_json' => "data/sfba_land_pts_64.geojson");
       //$rowe['forecast_json'] = "data/sfba_land_pts_64.geojson";
-      //$rowe[] = ['forecast_json' = "foo"];
+      $rowe[] = ['forecast_json' = "data/sfba_land_pts_64.geojson"];
       $names = array();
       $names[] = $rowe;
       return $app['twig']->render('database.twig', array(
