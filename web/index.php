@@ -90,6 +90,10 @@ $app->get('/db/', function() use($app) {
       // Get all the points of interest
       $json_string = file_get_contents("data/sfba_land_pts_64.geojson");
       $json_obj = json_decode($string, false);
+      foreach ($json_obj['features'] as $i => $item) {
+          error_log( "features: $i, " . $item['geometry']['coordinates'][0] );
+          error_log(var_dump($item));
+      }
 
           // For every point, get the forecast
           $ch = curl_init($url);
