@@ -48,6 +48,7 @@ $app->get('/', function() use($app) {
 
 
 // JMK
+/*
 $app->get('/db/', function() use($app) {
   $st = $app['pdo']->prepare('SELECT name FROM test_table');
   $st->execute();
@@ -62,43 +63,37 @@ $app->get('/db/', function() use($app) {
     'names' => $names
   ));
 });
-
+*/
 
 // JMK2
-$app->get('/dbupdate/', function() use($app) {
+$app->get('/db/', function() use($app) {
 
   date_default_timezone_set('America/Los_Angeles');
   $date = date('Y-m-d', time());
+  $epochSeconds = time();
   $APIKEY = "86f515c3f0103714bc87cfc7910bcdc5";
   $latLonTime = [38,-121,1476985813];
 
   //$url = "proxy.php?url=" . encodeURIComponent( "https://api.forecast.io/forecast/" . $APIKEY . "/" . $latLonTime.join(",") );
-  $url = "https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813";
+  $url = "https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,$epochSeconds";
   /*
     nowTime = Math.floor((new Date()).getTime() / 1000); // 1476985813
     https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
   */
 
-  error_log("test");
-  error_log("url: " . $url);
-/*
-  $ch = curl_init();
-  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  curl_setopt($ch, CURLOPT_URL, $url);
-  $result = curl_exec($ch);
-  curl_close($ch);
-*/
 
-$ch = curl_init($url);
-$pageurl=strtok($url,'?');
-error_log("pageurl: $pageurl"); // https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
-$querystring=strtok('?');
-error_log("querystring: $querystring"); // null
-$ch_encoded=curl_escape($ch, $querystring);
-curl_setopt($ch, CURLOPT_URL, $pageurl.'?'.$ch_encoded);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$result = curl_exec($ch);
+  $st = $app['pdo']->prepare('SELECT forecast_json FROM forecasts WHERE forecast_date = ?');
+  $st->execute(array($date));
+
+  $ch = curl_init($url);
+  $pageurl=strtok($url,'?');
+  error_log("pageurl: $pageurl"); // https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
+  $querystring=strtok('?');
+  error_log("querystring: $querystring"); // null
+  $ch_encoded=curl_escape($ch, $querystring);
+  curl_setopt($ch, CURLOPT_URL, $pageurl.'?'.$ch_encoded);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  $result = curl_exec($ch);
 
   $forecast_json = $result;
   error_log("result: $result"); // {"latitude":38,"longitude":-121,"timezone":"America/Los_Angeles","offset":-7,"currently":{"time":1476985813,"summary":"Clear","icon":"clear-day","precipIntensity":0,"precipProbabil...
@@ -112,8 +107,8 @@ $result = curl_exec($ch);
 /*
   Only do this if doesn't yet exist for today:
 */
-  $st = $app['pdo']->prepare('INSERT INTO forecasts(forecast_date, forecast_json) VALUES(?, ?)');
-  $st->execute(array($date, $forecast_json));
+  $st = $app['pdo']->prepare('INSERT INTO forecasts(forecast_date, forecast_json, epochseconds) VALUES(?, ?, ?)');
+  $st->execute(array($date, $forecast_json, $epochSeconds));
   //$st = $app['pdo']->prepare('SELECT name FROM test_table');
   //$st->execute();
 
