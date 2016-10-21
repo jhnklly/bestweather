@@ -110,17 +110,15 @@ $myArr['forecast_json'] = "cast";
 */
 
       $rowe = array();
-      $rowe[] = array('forecast_json' => $json_string);
-      //$rowe['forecast_json'] = "data/sfba_land_pts_64.geojson";
-      //$rowe['forecast_json'] = "any" . $json_string . "thing";
-      //$rowe[] = ['forecast_json' = "data/sfba_land_pts_64.geojson"];
+      //$rowe[] = array('forecast_json' => $json_string);
+
       $names = array();
       $names[] = $rowe;
+      /*
       return $app['twig']->render('database.twig', array(
-        //'names' => $json_string
         'names' => $rowe
       ));
-
+      */
       $json_obj = json_decode($string, false);
 
       //$names = array();
@@ -129,8 +127,10 @@ $myArr['forecast_json'] = "cast";
           var_dump($item);
           error_log(var_dump($item));
 
+          $rowe[] = array('forecast_json' => $item['geometry']['coordinates'][0]);
+
           return $app['twig']->render('database.twig', array(
-            'names' => $item
+            'names' => $rowe
           ));
       }
 
