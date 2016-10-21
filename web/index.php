@@ -94,6 +94,10 @@ $app->get('/db/', function() use($app) {
           echo "features: $i, " . $item['geometry']['coordinates'][0];
           var_dump($item);
           error_log(var_dump($item));
+
+          return $app['twig']->render('database.twig', array(
+            'names' => $item
+          ));
       }
 
           // For every point, get the forecast
