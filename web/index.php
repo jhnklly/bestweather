@@ -87,7 +87,14 @@ $app->get('/db/', function() use($app) {
   $row = $st->fetch(PDO::FETCH_ASSOC);
 
       // Get all the points of interest
-      $json_string = file_get_contents("data/sfba_land_pts_64.geojson");
+      //$json_string = file_get_contents("data/sfba_land_pts_64.geojson");
+
+          $ch = curl_init("data/sfba_land_pts_64.geojson");
+          $ch_encoded=curl_escape($ch, $querystring);
+          curl_setopt($ch, CURLOPT_URL, "data/sfba_land_pts_64.geojson");
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          $json_string = trim(curl_exec($ch));
+
 
       return $app['twig']->render('database.twig', array(
         'names' => $json_string
