@@ -88,7 +88,13 @@ $app->get('/db/', function() use($app) {
 
       // Get all the points of interest
       $json_string = file_get_contents("data/sfba_land_pts_64.geojson");
+
+      return $app['twig']->render('database.twig', array(
+        'names' => $json_string
+      ));
+
       $json_obj = json_decode($string, false);
+
       foreach ($json_obj['features'] as $i => $item) {
           echo "features: $i, " . $item['geometry']['coordinates'][0];
           var_dump($item);
@@ -99,9 +105,6 @@ $app->get('/db/', function() use($app) {
           ));
       }
 
-      return $app['twig']->render('database.twig', array(
-        'names' => $json_string
-      ));
 
   if (! $row ) {
           // For every point, get the forecast
