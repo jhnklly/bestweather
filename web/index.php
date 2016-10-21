@@ -121,6 +121,9 @@ $myArr['forecast_json'] = "cast";
       */
       $json_obj = json_decode($string, false);
 
+      error_log(var_dump($json_obj));
+      error_log("count: " . count($json_obj['features']);
+
       //$names = array();
       foreach ($json_obj['features'] as $i => $item) {
           echo "features: $i, " . $item['geometry']['coordinates'][0];
