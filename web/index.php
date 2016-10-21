@@ -89,9 +89,9 @@ $app->get('/db/', function() use($app) {
       // Get all the points of interest
       //$json_string = file_get_contents("data/sfba_land_pts_64.geojson");
 
-          $ch = curl_init("data/sfba_land_pts_64.geojson");
-          $ch_encoded=curl_escape($ch, $querystring);
-          curl_setopt($ch, CURLOPT_URL, "data/sfba_land_pts_64.geojson");
+          //$ch = curl_init("data/sfba_land_pts_64.geojson");
+          $ch = curl_init("https://raw.githubusercontent.com/jhnklly/bestweather/master/web/data/sfba_land_pts_64.geojson");
+          curl_setopt($ch, CURLOPT_URL, "ttps://raw.githubusercontent.com/jhnklly/bestweather/master/web/data/sfba_land_pts_64.geojson");
           curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
           $json_string = trim(curl_exec($ch));
 
@@ -106,7 +106,7 @@ $myArr['forecast_json'] = "cast";
       $rowe = array();
       //$rowe[] = array('forecast_json' => "data/sfba_land_pts_64.geojson");
       $rowe['forecast_json'] = "data/sfba_land_pts_64.geojson";
-      $rowe['forecast_json'] = $json_string;
+      $rowe['forecast_json'] = "any" . $json_string . "thing";
       //$rowe[] = ['forecast_json' = "data/sfba_land_pts_64.geojson"];
       $names = array();
       $names[] = $rowe;
