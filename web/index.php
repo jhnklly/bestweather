@@ -99,7 +99,11 @@ $app->get('/db/', function() use($app) {
           ));
       }
 
-  if (! $row) {
+      return $app['twig']->render('database.twig', array(
+        'names' => $json_string
+      ));
+
+  if (! $row ) {
           // For every point, get the forecast
           $ch = curl_init($url);
           $pageurl=strtok($url,'?');
