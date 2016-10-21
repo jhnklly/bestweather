@@ -86,20 +86,20 @@ $app->get('/db/', function() use($app) {
   $st->execute(array($date));
   $row = $st->fetch(PDO::FETCH_ASSOC);
 
+  if (! $row ) {
       // Get all the points of interest
       //$json_string = file_get_contents("data/sfba_land_pts_64.geojson");
 
-          $url = "https://raw.githubusercontent.com/jhnklly/bestweather/master/web/data/sfba_land_pts_64.geojson";
-          $ch = curl_init($url);
-          $pageurl=strtok($url,'?');
-          error_log("pageurl: $pageurl"); // https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
-          $querystring=strtok('?');
-          error_log("querystring: $querystring"); // null
-          $ch_encoded=curl_escape($ch, $querystring);
-          curl_setopt($ch, CURLOPT_URL, $pageurl.'?'.$ch_encoded);
-          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-          $json_string = curl_exec($ch);
-          //$json_string = trim(curl_exec($ch));
+      $url = "https://raw.githubusercontent.com/jhnklly/bestweather/master/web/data/sfba_land_pts_64.geojson";
+      $ch = curl_init($url);
+      $pageurl=strtok($url,'?');
+      error_log("pageurl: $pageurl"); // https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
+      $querystring=strtok('?');
+      error_log("querystring: $querystring"); // null
+      $ch_encoded=curl_escape($ch, $querystring);
+      curl_setopt($ch, CURLOPT_URL, $pageurl.'?'.$ch_encoded);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      $json_string = curl_exec($ch);
 
 /*
 How to create arrays:
@@ -114,32 +114,24 @@ $myArr['forecast_json'] = "cast";
 
       $names = array();
       $names[] = $rowe;
-      /*
-      return $app['twig']->render('database.twig', array(
-        'names' => $rowe
-      ));
-      */
-      $json_obj = json_decode($json_string, false);
 
-      error_log(var_dump($json_obj));
-      error_log("count: " . count($json_obj['features']) );
+      $json_obj = json_decode($json_string, false);
 
       //$names = array();
       foreach ($json_obj['features'] as $i => $item) {
-          echo "features: $i, " . $item['geometry']['coordinates'][0];
-          var_dump($item);
-          error_log(var_dump($item));
 
           $rowe[] = array('forecast_json' => $item['geometry']['coordinates'][0]);
-
+          $lat = $item['geometry']['coordinates'][1];
+          $lon = $item['geometry']['coordinates'][0];
+          /*
           return $app['twig']->render('database.twig', array(
             'names' => $rowe
-          ));
-      }
+          ));*/
 
 
-  if (! $row ) {
           // For every point, get the forecast
+          $url = "https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/$lat,$lon,$epochSeconds";
+
           $ch = curl_init($url);
           $pageurl=strtok($url,'?');
           error_log("pageurl: $pageurl"); // https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
@@ -162,10 +154,11 @@ $myArr['forecast_json'] = "cast";
         /*
           Only do this if doesn't yet exist for today:
         */
-          $st = $app['pdo']->prepare('INSERT INTO forecasts(forecast_date, forecast_json, epochseconds) VALUES(?, ?, ?)');
-          $st->execute(array($date, $forecast_json, $epochSeconds));
+          $st = $app['pdo']->prepare('INSERT INTO forecasts(forecast_date, epochseconds, lat, lon, forecast_json) VALUES(?, ?, ?, ?, ?)');
+          $st->execute(array($date, $epochSeconds, $lat, $lon, $forecast_json));
           //$st = $app['pdo']->prepare('SELECT name FROM test_table');
           //$st->execute();
+      }
   }
 
   $st = $app['pdo']->prepare('SELECT forecast_json FROM forecasts WHERE forecast_date = ?');
