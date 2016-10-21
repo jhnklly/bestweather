@@ -116,11 +116,10 @@ $myArr['forecast_json'] = "cast";
       $names[] = $rowe;
 
       $json_obj = json_decode($json_string, true);
-      var_dump($json_obj);
+      //var_dump($json_obj);
       $features = $json_obj["features"];
       var_dump($features[0]);
 
-      return;
 
       //$names = array();
       foreach ($features as $i => $item) {
@@ -164,6 +163,9 @@ $myArr['forecast_json'] = "cast";
           //$st = $app['pdo']->prepare('SELECT name FROM test_table');
           //$st->execute();
       }
+
+      return;
+
   }
 
   $st = $app['pdo']->prepare('SELECT forecast_json FROM forecasts WHERE forecast_date = ?');
