@@ -115,9 +115,9 @@ $myArr['forecast_json'] = "cast";
       $names = array();
       $names[] = $rowe;
 
-      $json_obj = json_decode($json_string, false);
+      $json_obj = json_decode($json_string, true);
       var_dump($json_obj);
-      $features = $json_obj['features'];
+      $features = $json_obj["features"];
       var_dump($features[0]);
 
       return;
