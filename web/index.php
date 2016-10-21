@@ -105,8 +105,9 @@ $myArr['forecast_json'] = "cast";
 
       $rowe = array();
       //$rowe[] = array('forecast_json' => "data/sfba_land_pts_64.geojson");
-      //$rowe['forecast_json'] = "data/sfba_land_pts_64.geojson";
-      $rowe[] = ['forecast_json' = "data/sfba_land_pts_64.geojson"];
+      $rowe['forecast_json'] = "data/sfba_land_pts_64.geojson";
+      $rowe['forecast_json'] = $json_string;
+      //$rowe[] = ['forecast_json' = "data/sfba_land_pts_64.geojson"];
       $names = array();
       $names[] = $rowe;
       return $app['twig']->render('database.twig', array(
