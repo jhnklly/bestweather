@@ -104,13 +104,14 @@ $myArr['otherKey'] = "two";
 $myArr['forecast_json'] = "cast";
 
       $rowe = array();
+      $rowe[] = array('forecast_json' => "data/sfba_land_pts_64.geojson");
       //$rowe['forecast_json'] = "data/sfba_land_pts_64.geojson";
-      $rowe['forecast_json'] = "foo";
+      //$rowe[] = ['forecast_json' = "foo"];
       $names = array();
       $names[] = $rowe;
       return $app['twig']->render('database.twig', array(
         //'names' => $json_string
-        'names' => $myArr
+        'names' => $rowe
       ));
 
       $json_obj = json_decode($string, false);
