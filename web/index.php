@@ -116,9 +116,9 @@ $myArr['forecast_json'] = "cast";
       $names[] = $rowe;
 
       $json_obj = json_decode($json_string, false);
-
+      $features = $json_obj['features']
       //$names = array();
-      foreach ($json_obj['features'] as $i => $item) {
+      foreach ($features as $i => $item) {
 
           $rowe[] = array('forecast_json' => $item['geometry']['coordinates'][0]);
           $lat = $item['geometry']['coordinates'][1];
