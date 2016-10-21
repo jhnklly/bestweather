@@ -119,7 +119,7 @@ $myArr['forecast_json'] = "cast";
         'names' => $rowe
       ));
       */
-      $json_obj = json_decode($string, false);
+      $json_obj = json_decode($json_string, false);
 
       error_log(var_dump($json_obj));
       error_log("count: " . count($json_obj['features']) );
