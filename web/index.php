@@ -178,6 +178,7 @@ $app->get('/db/', function() use($app) {
     }
   */
 
+
   $rows = array();
   while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
     // One row for each lat-lon
@@ -186,9 +187,13 @@ $app->get('/db/', function() use($app) {
     $app['monolog']->addDebug('Row ' . $fcast . ' | ' );
 
     $hourlyData = $fcast["hourly"]["data"];
-    $app['monolog']->addDebug('Row ' . $hourlyData . ' | ' );
+    $hourlyString = json_encode($hourlyData);
 
-    $rows[] = array("lat" => $row['lat'], "lon" => $row['lon'], "hourlyData" => $hourlyData);
+    //$app['monolog']->addDebug('Row ' . $hourlyData . ' | ' );
+
+    $js = "A[lat$latlon$lon] = $hourlyString;";
+
+    $rows[] = array("js" => $js);
     //$rows[] = $row;
   }
 

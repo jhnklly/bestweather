@@ -9,6 +9,7 @@ var A = {};
 {% for n in rows %}
 A["lat" + {{ n.lat }} + "lon" + {{ n.lon }}] = {{ n.hourlyData }};
 
+{{ n.js }}
 
 {% else %}
   <li>Nameless!</li>
