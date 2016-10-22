@@ -181,8 +181,11 @@ $app->get('/db/', function() use($app) {
   $rows = array();
   while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
     // One row for each lat-lon
-    $app['monolog']->addDebug('Row ' . $row['forecast_json'] . ' | ' );
-    $rows[] = $row;
+    // $app['monolog']->addDebug('Row ' . $row['forecast_json'] . ' | ' );
+    $fcast = json_decode($row['forecast_json']);
+    $hourlyData = $fcast["hourly"]["data"];
+    $rows[] = array("lat" => $row['lat'], "lon" => $row['lon'], "hourlyData" => $hourlyData);
+    //$rows[] = $row;
   }
 
   /*

@@ -2,9 +2,18 @@
 
 {% block content %}
 
+<script>
+
+var A = {};
+// for each latlon, track hourly time, precipIntensity, temperature, cloudCover, windSpeed
+A["lat" + {{ n.lat }} + "lon" + {{ n.lon }}] = {{ n.hourlyData }};
+
+</script>
+
+
 <ul>
 {% for n in rows %}
-  <li> {{ n.lat }} | {{ n.lon }} | {{ n.forecast_date }} | {{ n.forecast_json.currently.summary }} </li>
+  <li> {{ n.lat }} | {{ n.lon }} | {{ n.hourlyData }} | {{ n.forecast_json.hourly.data }} </li>
 {% else %}
   <li>Nameless!</li>
 {% endfor %}
