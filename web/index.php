@@ -203,6 +203,7 @@ $app->get('/db/', function() use($app) {
       );
     }
 
+    $app['monolog']->addDebug('Row ' . $hrDat . ' | ' );
 
     $forecastObj = array(
       "lat" => $row['lat'],
@@ -214,7 +215,6 @@ $app->get('/db/', function() use($app) {
 
     $js = "A.forecast = $forecastString ;";
     echo $js;
-    $app['monolog']->addDebug('Row ' . $js . ' | ' );
 
     $rows[] = array("js" => $js);
     //$rows[] = $row;

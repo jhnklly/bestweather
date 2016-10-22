@@ -5,11 +5,12 @@
 <script>
 
 var A = {};
+A.forecast = [];
+
 // for each latlon, track hourly time, precipIntensity, temperature, cloudCover, windSpeed
 {% for n in rows %}
-A["lat" + {{ n.lat }} + "lon" + {{ n.lon }}] = {{ n.hourlyData }};
 
-{{ n.js }}
+  A.forecast.push( {{ n.js }} );\n
 
 {% else %}
   <li>Nameless!</li>
