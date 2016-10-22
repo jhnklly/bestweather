@@ -184,13 +184,16 @@ $app->get('/db/', function() use($app) {
     // One row for each lat-lon
     // $app['monolog']->addDebug('Row ' . $row['forecast_json'] . ' | ' );
     $fcast = json_decode($row['forecast_json'], true);
-    $app['monolog']->addDebug('Row ' . $fcast . ' | ' );
+    $lat = $row['lat'];
+    $lon = $row['lon'];
+
+    //$app['monolog']->addDebug('Row ' . $fcast . ' | ' );
 
     $hourlyData = $fcast["hourly"]["data"];
     $hourlyString = json_encode($hourlyData);
 
 
-    $js = "A[lat$latlon$lon] = $hourlyString;";
+    $js = "A[lat$lat lon$lon ] = $hourlyString ;";
     echo $js;
     $app['monolog']->addDebug('Row ' . $js . ' | ' );
 
