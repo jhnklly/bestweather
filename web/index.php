@@ -189,9 +189,10 @@ $app->get('/db/', function() use($app) {
     $hourlyData = $fcast["hourly"]["data"];
     $hourlyString = json_encode($hourlyData);
 
-    //$app['monolog']->addDebug('Row ' . $hourlyData . ' | ' );
 
     $js = "A[lat$latlon$lon] = $hourlyString;";
+    echo $js;
+    $app['monolog']->addDebug('Row ' . $js . ' | ' );
 
     $rows[] = array("js" => $js);
     //$rows[] = $row;
