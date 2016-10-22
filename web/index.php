@@ -147,7 +147,7 @@ $app->get('/db/', function() use($app) {
           $result = curl_exec($ch);
 
           $forecast_json = $result;
-          error_log("result: $result"); // {"latitude":38,"longitude":-121,"timezone":"America/Los_Angeles","offset":-7,"currently":{"time":1476985813,"summary":"Clear","icon":"clear-day","precipIntensity":0,"precipProbabil...
+          error_log("result: $i"); // {"latitude":38,"longitude":-121,"timezone":"America/Los_Angeles","offset":-7,"currently":{"time":1476985813,"summary":"Clear","icon":"clear-day","precipIntensity":0,"precipProbabil...
         /*
           // Don't convert json to object; leave json as string for db insert.
           $forecast_json = json_decode($result);
