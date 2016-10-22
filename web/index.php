@@ -192,7 +192,7 @@ $app->get('/db/', function() use($app) {
     $hourlyData = $fcast["hourly"]["data"];
     $hrDat = [];
 
-    foreach ($datum as $i => $dat) {
+    foreach ($hourlyData as $i => $dat) {
       $hrDat[] = array(
         "time" => $dat["time"],
         "clouds" => $dat["cloudCover"],
