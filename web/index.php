@@ -190,10 +190,29 @@ $app->get('/db/', function() use($app) {
     //$app['monolog']->addDebug('Row ' . $fcast . ' | ' );
 
     $hourlyData = $fcast["hourly"]["data"];
-    $hourlyString = json_encode($hourlyData);
+    $hrDat = [];
+
+    foreach ($datum as $i => $dat) {
+      $hrDat[] = array(
+        "time" => $dat["time"],
+        "clouds" => $dat["cloudCover"],
+        "precip" => $dat["precipProbability"],
+        "wind" => $dat["windSpeed"],
+        "tempF" => $dat["temperature"],
+        "vis" => $dat["visibility"]
+      );
+    }
 
 
-    $js = "A[lat$lat lon$lon ] = $hourlyString ;";
+    $forecastObj = array(
+      "lat" => $row['lat'],
+      "lon" => $row['lon'],
+      "hourly" => $hrDat
+    );
+
+    $forecastString = json_encode($forecastObj);
+
+    $js = "A.forecast = $forecastString ;";
     echo $js;
     $app['monolog']->addDebug('Row ' . $js . ' | ' );
 
