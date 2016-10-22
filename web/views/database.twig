@@ -6,17 +6,14 @@
 
 var A = {};
 // for each latlon, track hourly time, precipIntensity, temperature, cloudCover, windSpeed
+{% for n in rows %}
 A["lat" + {{ n.lat }} + "lon" + {{ n.lon }}] = {{ n.hourlyData }};
 
-</script>
 
-
-<ul>
-{% for n in rows %}
-  <li> {{ n.lat }} | {{ n.lon }} | {{ n.hourlyData }} | {{ n.forecast_json.hourly.data }} </li>
 {% else %}
   <li>Nameless!</li>
 {% endfor %}
-</ul>
+
+</script>
 
 {% endblock %}
