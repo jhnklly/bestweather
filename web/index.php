@@ -118,7 +118,7 @@ $app->get('/db/', function() use($app) {
       $json_obj = json_decode($json_string, true);
       //var_dump($json_obj);
       $features = $json_obj["features"];
-      var_dump($features[0]);
+      //var_dump($features[0]);
 
 
       //$names = array();
