@@ -86,7 +86,7 @@ $app->get('/db/', function() use($app) {
   $st->execute(array($date));
   $row = $st->fetch(PDO::FETCH_ASSOC);
 
-  if (! $row ) {
+  if (! $row  && 1==2) {
       // Get all the points of interest
       //$json_string = file_get_contents("data/sfba_land_pts_64.geojson");
 
