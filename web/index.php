@@ -101,13 +101,13 @@ $app->get('/db/', function() use($app) {
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
       $json_string = curl_exec($ch);
 
-/*
-How to create arrays:
-$myArr = array("key1" => 20, "otherKey" => 10);
-$myArr['key1'] = "one";
-$myArr['otherKey'] = "two";
-$myArr['forecast_json'] = "cast";
-*/
+      /*
+      How to create arrays:
+      $myArr = array("key1" => 20, "otherKey" => 10);
+      $myArr['key1'] = "one";
+      $myArr['otherKey'] = "two";
+      $myArr['forecast_json'] = "cast";
+      */
 
       $rowe = array();
       //$rowe[] = array('forecast_json' => $json_string);
@@ -123,10 +123,10 @@ $myArr['forecast_json'] = "cast";
 
       //$names = array();
       foreach ($features as $i => $item) {
-
+          // For every point, get the forecast
           usleep(0.1 * 1000 * 1000); // microseconds; 923 points = 92 seconds
 
-          $rowe[] = array('forecast_json' => $item['geometry']['coordinates'][0]);
+          //$rowe[] = array('forecast_json' => $item['geometry']['coordinates'][0]);
           $lat = $item['geometry']['coordinates'][1];
           $lon = $item['geometry']['coordinates'][0];
           /*
@@ -134,8 +134,6 @@ $myArr['forecast_json'] = "cast";
             'names' => $rowe
           ));*/
 
-
-          // For every point, get the forecast
           $url = "https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/$lat,$lon,$epochSeconds";
 
           $ch = curl_init($url);
@@ -165,30 +163,34 @@ $myArr['forecast_json'] = "cast";
           //$st = $app['pdo']->prepare('SELECT name FROM test_table');
           //$st->execute();
       }
-
-      return;
-
+      // return;
   }
+  // End db inserts
 
-  $st = $app['pdo']->prepare('SELECT forecast_json FROM forecasts WHERE forecast_date = ?');
+  $st = $app['pdo']->prepare('SELECT lat, lon, forecast_date, forecast_json FROM forecasts WHERE forecast_date = ?');
   $st->execute(array($date));
 
-/*
-  $names = array();
-  while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
-    $app['monolog']->addDebug('Row ' . $row['name']);
-    $names[] = $row;
-  }
-*/
+  /*
+    $names = array();
+    while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+      $app['monolog']->addDebug('Row ' . $row['name']);
+      $names[] = $row;
+    }
+  */
 
-  $names = array();
+  $rows = array();
   while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+    // One row for each lat-lon
     $app['monolog']->addDebug('Row ' . $row['forecast_json'] . ' | ' );
-    $names[] = $row;
+    $rows[] = $row;
   }
 
+  /*
+  Pass all the data ()
+  to the view
+  */
   return $app['twig']->render('database.twig', array(
-    'names' => $names
+    'rows' => $rows
   ));
 });
 

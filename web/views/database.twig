@@ -3,8 +3,8 @@
 {% block content %}
 
 <ul>
-{% for n in names %}
-  <li> {{ n.forecast_json }} </li>
+{% for n in rows %}
+  <li> {{ n.lat }} | {{ n.lon }} | {{ n.date }} | {{ n.forecast_json.currently.summary }} </li>
 {% else %}
   <li>Nameless!</li>
 {% endfor %}
