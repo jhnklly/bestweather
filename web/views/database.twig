@@ -140,7 +140,9 @@ var gridY = 0.015625;
 
 // Todo - make gj on server
 A.forecast.forEach(function(v){
-  A.gjRectangles.features.push( returnGJRectangle(+v.lon, +v.lat, +v.lon + gridX, +v.lat + gridY, v) );
+  var props = v;
+  props.sun = 1 - v.hourly[0].cloudCover;
+  A.gjRectangles.features.push( returnGJRectangle(+v.lon, +v.lat, +v.lon + gridX, +v.lat + gridY, props) );
 });
 
 function returnGJRectangle(west, south, east, north, props) {
@@ -182,6 +184,7 @@ function returnGJPoint(lon, lat, props) {
   return feature;
 }
 
+initMap();
 
 function initMap() {
   //A.gjPoints = data;
