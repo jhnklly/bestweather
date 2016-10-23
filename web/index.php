@@ -218,7 +218,7 @@ $app->get('/db/', function() use($app) {
     $forecastString = json_encode($forecastObj, JSON_HEX_QUOT);
 
     $js = $forecastString;
-    //$js = $forecastObj;
+    $js = $forecastObj;
     echo "echo " . $js;
     // A.forecast.push( {{ n.js }} );
 

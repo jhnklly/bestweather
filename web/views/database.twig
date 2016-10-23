@@ -12,6 +12,8 @@ A.forecast = [];
 
   A.forecast.push( {{ n.js }} );
 
+  {{(n.js|json_encode|raw)}};
+
 {% else %}
   <li>Nameless!</li>
 {% endfor %}
