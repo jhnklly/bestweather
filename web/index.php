@@ -213,7 +213,7 @@ $app->get('/db/', function() use($app) {
       "hourly" => $hrDat
     );
 
-    $forecastString = json_encode($forecastObj);
+    $forecastString = json_encode($forecastObj|raw);
 
     $js = $forecastString;
     //echo $js;
