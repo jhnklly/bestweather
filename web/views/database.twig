@@ -4,6 +4,7 @@
 
 <div id="myMap"></div>
 
+
 <script>
 
 var A = {};
@@ -233,7 +234,7 @@ function animate() {
     d3.selectAll('.point_highlight')
       .attr("fill", function(d){
         //console.log(d);
-        return colorGradient(d.properties.hourly[A.IDX].cloud);
+        return colorGradient(d.properties.hourly[A.IDX].clouds);
       })
 
     //A.forecast.push( {"lat":"38.00000000","lon":"-122.00000000","hourly":[{"time":1477119600,"clouds":0.05,"precip":0,"wind":3.21,"tempF":59.91,"vis":9.81}]});
