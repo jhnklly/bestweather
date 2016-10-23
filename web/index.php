@@ -215,7 +215,7 @@ $app->get('/db/', function() use($app) {
 
     $forecastString = json_encode($forecastObj);
 
-    $js = "A.forecast = $forecastString; \n";
+    $js = $forecastString;
     //echo $js;
 
     $rows[] = array("js" => $js);
