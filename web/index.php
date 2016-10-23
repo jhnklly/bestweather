@@ -203,8 +203,8 @@ $app->get('/db/', function() use($app) {
       );
     }
 
-    echo "\n hrdat: ";
-    var_dump($hrDat);
+    //echo "\n hrdat: ";
+    //var_dump($hrDat);
     //$app['monolog']->addDebug('Row ' . $hrDat . ' | ' );
 
     $forecastObj = array(
@@ -216,7 +216,7 @@ $app->get('/db/', function() use($app) {
     $forecastString = json_encode($forecastObj);
 
     $js = "A.forecast = $forecastString; \n";
-    echo $js;
+    //echo $js;
 
     $rows[] = array("js" => $js);
     //$rows[] = $row;
