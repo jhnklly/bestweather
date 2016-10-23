@@ -167,7 +167,7 @@ $app->get('/db/', function() use($app) {
   }
   // End db inserts
 
-  $st = $app['pdo']->prepare('SELECT lat, lon, forecast_date, forecast_json FROM forecasts WHERE forecast_date = ? LIMIT 3');
+  $st = $app['pdo']->prepare('SELECT lat, lon, forecast_date, forecast_json FROM forecasts WHERE forecast_date = ? ');
   $st->execute(array($date));
 
   /*
@@ -215,13 +215,11 @@ $app->get('/db/', function() use($app) {
 
     //$forecastString = json_encode($forecastObj, JSON_HEX_QUOT) ;
     //$forecastString = htmlspecialchars_decode(json_encode($forecastObj, JSON_HEX_QUOT)) ;
-    $forecastString = json_encode($forecastObj, JSON_HEX_QUOT);
+    //$forecastString = json_encode($forecastObj, JSON_HEX_QUOT);
 
     //$js = $forecastString;
     $js = $forecastObj;
-    echo "echo " . $js;
     // A.forecast.push( {{ n.js }} );
-
 
     $rows[] = array("js" => $js);
     //$rows[] = $row;
