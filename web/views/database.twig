@@ -2,7 +2,13 @@
 
 {% block content %}
 
+<div id="myMap"></div>
+
 <script>
+
+var A = {};
+A.IDX = 0;
+
 
 var A = {};
 A.forecast = [];
@@ -14,18 +20,6 @@ A.forecast = [];
 {% else %}
   <li>Nameless!</li>
 {% endfor %}
-
-
-
-</script>
-
-
-<div id="myMap"></div>
-
-<script>
-
-var A = {};
-A.IDX = 0;
 
 A.nowTime = Math.floor((new Date()).getTime() / 1000);
 
