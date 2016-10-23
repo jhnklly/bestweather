@@ -8,7 +8,16 @@
 
 var A = {};
 A.IDX = 0;
+
 A.forecast = [];
+
+// for each latlon, track hourly time, precipIntensity, temperature, cloudCover, windSpeed
+{% for n in rows %}
+  A.forecast.push( {{(n.js|json_encode|raw)}} ) ;
+
+{% else %}
+  // No data!
+{% endfor %}
 
 A.nowTime = Math.floor((new Date()).getTime() / 1000);
 
@@ -118,7 +127,7 @@ function updateLegend() {
 
 }
 
-//A.forecast.push( {"lat":"38.00000000","lon":"-122.00000000","hourly":[{"time":1477119600,"clouds":0.05,"precip":0,"wind":3.21,"tempF":59.91,"vis":9.81}]});
+A.forecast.push( {"lat":"38.00000000","lon":"-122.00000000","hourly":[{"time":1477119600,"clouds":0.05,"precip":0,"wind":3.21,"tempF":59.91,"vis":9.81}]});
 
 // Convert data to geojson
 A.gjRectangles = {
@@ -128,7 +137,7 @@ A.gjRectangles = {
 
 var gridX = 0.015625;
 var gridY = 0.015625;
-var hg = gridX/2;
+var hg = gridX / 2;
 
 // Todo - make gj on server
 A.forecast.forEach(function(v){
@@ -210,7 +219,9 @@ function initMap() {
       //.on("load", load)
       ;
   map.add(A.gjLayer);
+
 };
+
 
 
 function animate() {
@@ -225,7 +236,9 @@ function animate() {
         return colorGradient(d.properties.hourly[A.IDX].cloud);
       })
 
-A.forecast.push( {"lat":"38.00000000","lon":"-122.00000000","hourly":[{"time":1477119600,"clouds":0.05,"precip":0,"wind":3.21,"tempF":59.91,"vis":9.81}]});
+    //A.forecast.push( {"lat":"38.00000000","lon":"-122.00000000","hourly":[{"time":1477119600,"clouds":0.05,"precip":0,"wind":3.21,"tempF":59.91,"vis":9.81}]});
+
+    //A.gjRectangles.features[0].properties.hourly[0];
 
     A.gjRectangles.features.forEach(function(v,i){
       console.log(A.IDX, v.properties.sun, v.properties.hourly[A.IDX].clouds);
@@ -238,6 +251,7 @@ A.forecast.push( {"lat":"38.00000000","lon":"-122.00000000","hourly":[{"time":14
     A.IDX = (A.IDX >= A.gjRectangles.features[0].properties.hourly.length - 1) ? 0 : A.IDX + 1;
   }, 1000);
 }
+
 
 function processData(gj) {
 
@@ -309,3 +323,4 @@ function copyJSON(json) {
 </script>
 
 {% endblock %}
+
