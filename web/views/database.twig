@@ -10,7 +10,7 @@ A.forecast = [];
 // for each latlon, track hourly time, precipIntensity, temperature, cloudCover, windSpeed
 {% for n in rows %}
 
-  A.forecast.push( {{ n.js }} );\n
+  A.forecast.push( {!! json_encode(n.js) !!} );
 
 {% else %}
   <li>Nameless!</li>
