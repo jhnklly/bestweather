@@ -219,7 +219,7 @@ $app->get('/db/', function() use($app) {
 
     $js = $forecastString;
     //$js = $forecastObj;
-    //echo $js;
+    echo "echo " . $js;
     // A.forecast.push( {{ n.js }} );
 
 
