@@ -214,7 +214,7 @@ $app->get('/db/', function() use($app) {
     );
 
     //$forecastString = json_encode($forecastObj, JSON_HEX_QUOT) ;
-    $forecastString = htmlspecialchars(json_encode($forecastObj)) ;
+    $forecastString = htmlspecialchars_decode(json_encode($forecastObj)) ;
 
     $js = $forecastString;
     //$js = $forecastObj;
