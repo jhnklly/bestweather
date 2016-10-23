@@ -137,12 +137,13 @@ A.gjRectangles = {
 
 var gridX = 0.015625;
 var gridY = 0.015625;
+var hg = gridX / 2;
 
 // Todo - make gj on server
 A.forecast.forEach(function(v){
   var props = v;
   props.sun = 1 - v.hourly[0].clouds;
-  A.gjRectangles.features.push( returnGJRectangle(+v.lon, +v.lat, +v.lon + gridX, +v.lat + gridY, props) );
+  A.gjRectangles.features.push( returnGJRectangle(+v.lon - hg, +v.lat - hg, +v.lon + hg, +v.lat + hg, props) );
 });
 
 function returnGJRectangle(west, south, east, north, props) {
