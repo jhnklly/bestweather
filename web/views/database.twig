@@ -233,8 +233,9 @@ function animate() {
 
     d3.selectAll('.point_highlight')
       .attr("fill", function(d){
-        console.log(A.IDX, d.properties);
+        /*console.log(A.IDX, d.properties);
         console.log(d.properties.hourly[A.IDX].clouds);
+        */
         return colorGradient(d.properties.hourly[A.IDX].clouds);
       })
 
@@ -242,12 +243,13 @@ function animate() {
 
     //A.gjRectangles.features[0].properties.hourly[0];
 
-    A.gjRectangles.features.forEach(function(v,i){
+    /*A.gjRectangles.features.forEach(function(v,i){
       console.log(A.IDX, v.properties.sun, v.properties.hourly[A.IDX].clouds);
 
       v.properties.sun = v.properties.hourly[A.IDX].clouds;
-    });
+    });*/
 
+    console.log(A.IDX);
     debugger;
 
     A.IDX += 1;
