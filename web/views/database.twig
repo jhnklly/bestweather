@@ -16,7 +16,7 @@ A.forecast = [];
   A.forecast.push( {{(n.js|json_encode|raw)}} ) ;
 
 {% else %}
-  <li>Nameless!</li>
+  // No data!
 {% endfor %}
 
 A.nowTime = Math.floor((new Date()).getTime() / 1000);
@@ -140,7 +140,7 @@ var gridY = 0.015625;
 
 // Todo - make gj on server
 A.forecast.forEach(function(v){
-  A.gjRectangles.features.push( returnGJRectangle(+v.lat, +v.lon, +v.lat + gridX, +v.lon + gridY, v) );
+  A.gjRectangles.features.push( returnGJRectangle(+v.lon, +v.lat, +v.lon + gridX, +v.lat + gridY, v) );
 });
 
 function returnGJRectangle(west, south, east, north, props) {
