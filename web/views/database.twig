@@ -9,7 +9,6 @@ A.forecast = [];
 
 // for each latlon, track hourly time, precipIntensity, temperature, cloudCover, windSpeed
 {% for n in rows %}
-
   A.forecast.push( {{(n.js|json_encode|raw)}} ) ;
 
 {% else %}
@@ -22,7 +21,6 @@ A.forecast = [];
 
 
 <div id="myMap"></div>
-
 
 <script>
 
@@ -51,10 +49,6 @@ var sfba = [
     {lon: -122.3243053, lat: 37.5640288},
     {lon: -122.2657, lat: 37.7975}
 ];
-
-var result_fields = ['name','county','country','label','layer','confidence'];
-var result_fields_nominatim = ['lat','lon','display_name','class','type','importance'];
-var LINE_COUNT = 0, BUNDLE_SIZE = 6;
 
 var intr = mapsense.interact();
 var arro = mapsense.arrow();
@@ -110,8 +104,8 @@ var colorGradient = d3.scale.cubehelix()
 colorGradient.domain([0, 1]);
 
 function updateLegend() {
-    var width = 960,
-    height = 500;
+  var width = 960,
+  height = 500;
 
   var ext_color_domain = [0, 0.2, 0.4, 0.6, 0.8, 1];
   var legend_labels = ["< 50", "50+", "150+", "350+", "750+", "> 1500"];
@@ -141,10 +135,65 @@ function updateLegend() {
 
 }
 
+A.forecast.push( {"lat":"38.00000000","lon":"-122.00000000","hourly":[{"time":1477119600,"clouds":0.05,"precip":0,"wind":3.21,"tempF":59.91,"vis":9.81}]});
+
+// Convert data to geojson
+A.gjRectangles = {
+  "type": "FeatureCollection",
+  "features": []
+};
+
+var gridX = 0.015625;
+var gridY = 0.015625;
+
+// Todo - make gj on server
+A.forecast.forEach(function(v){
+  A.gjRectangles.features.push( returnGJRectangle(+v.lat, +v.lon, +v.lat + gridX, +v.lon + gridY, v) );
+});
+
+function returnGJRectangle(west, south, east, north, props) {
+  var properties = props || {};
+
+  var polygonFeature = {
+    "type": "Feature",
+    "properties": properties,
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [
+          []
+      ]
+    }
+  };
+
+  var coordArr = polygonFeature.geometry.coordinates[0];
+  coordArr.push([west, south]);
+  coordArr.push([west, north]);
+  coordArr.push([east, north]);
+  coordArr.push([east, south]);
+  coordArr.push([west, south]);
+
+  return polygonFeature;
+}
+
+function returnGJPoint(lon, lat, props) {
+  var properties = props || {};
+
+  var feature = {
+    "type": "Feature",
+    "properties": properties,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [lon, lat]
+    }
+  };
+
+  return feature;
+}
+
 
 function initMap() {
-  A.gjPoints = data;
-  A.gjRectangles = pointGridToRectangles(data);
+  //A.gjPoints = data;
+  //A.gjRectangles = pointGridToRectangles(data);
   //console.log(A.gjPoints.features);
 
   A.labelData = [];
@@ -247,6 +296,5 @@ function copyJSON(json) {
 }
 
 </script>
-
 
 {% endblock %}
