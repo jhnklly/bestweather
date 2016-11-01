@@ -23,6 +23,25 @@ var map;
 
 A.forecast = [];
 A.nowTime = Math.floor((new Date()).getTime() / 1000);
+A.nowTime = A.nowTime - 24*60*60*9; // Oct 23?
+A.nowTime = 1477251130; // Oct 23?
+/*
+1478028750 = Nov 1
+1477251130 =
+
+insert into forecasts (forecast_date, forecast_json, epochseconds, lat, lon) (
+  SELECT
+    now(),
+    forecast_json,
+    epochseconds,
+    lat,
+    lon
+  FROM
+    forecasts
+  WHERE
+    forecast_date::date = '2016-10-31'
+)
+*/
 
 A.selectItems = [
   "clouds",
