@@ -154,7 +154,7 @@ var hg = gridX / 2;
 
 function init() {
   initMap("clouds","hourly");
-  initUI();
+  //initUI();
 }
 
 function initUI() {
