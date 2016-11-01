@@ -115,6 +115,8 @@ function init() {
 }
 
 function initUI() {
+  console.log("initMap");
+  console.log(mapsense);
 
   d3.select('body')
     .append('select')
