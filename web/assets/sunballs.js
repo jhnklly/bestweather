@@ -19,6 +19,7 @@ components:
 */
 var A = {};
 A.IDX = 0;
+var map;
 
 A.forecast = [];
 A.nowTime = Math.floor((new Date()).getTime() / 1000);
@@ -54,52 +55,6 @@ var sfba = [
 
 var intr = mapsense.interact();
 var arro = mapsense.arrow();
-
-var map = mapsense.map('#myMap') // init the map
-    .extent(sfba) // zoom to bounds, regardless of window size
-    .tileSize({x:256,y:256})
-    /*.add(
-        mapsense.basemap().apiKey(my_key).style("parchment")
-    )*/
-    ;
-
-map.add(mapsense.hash());
-
-d3.select('.mapsense-attribution').html("");
-
-map.interact(false);
-map.add(mapsense.drag());
-map.add(mapsense.wheel());
-map.add(mapsense.dblclick());
-map.add(mapsense.touch());
-mapsense.compass().map(map); //enable shift zoom
-
-var max_extents = [
-    {lon: 180, lat: 90}, // opposites, because we'll expand out
-    {lon: -180, lat: -90}
-];
-
-satellite_url = "http://{S}.mqcdn.com/tiles/1.0.0/sat/{Z}/{X}/{Y}.jpg"; // Credit http://developer.mapquest.com/web/products/open/map
-
-var basemap_url = "http://{S}.basemaps.cartocdn.com/light_all/{Z}/{X}/{Y}.png";
-var basemap_url = "http://{S}.basemaps.cartocdn.com/light_nolabels/{Z}/{X}/{Y}.png";
-
-imagery_layer = mapsense.image()
-    .url(mapsense.url(basemap_url)
-    .hosts(["a", "b", "c", "d"]));
-
-labels_url = "http://stamen-tiles-{S}.a.ssl.fastly.net/toner-labels/{Z}/{X}/{Y}.png";
-labels_url = "http://{S}.basemaps.cartocdn.com/light_only_labels/{Z}/{X}/{Y}.png";
-
-labels_layer = mapsense.image()
-    .url(mapsense.url(labels_url)
-    .hosts(["a", "b", "c", "d"]))
-    ;
-
-map.add(imagery_layer.visible(true).id("imagery_layer"));
-map.add(labels_layer.visible(true).id("labels_layer"));
-d3.select("#labels_layer").attr("style","opacity: 0.5;");
-
 
 var colorGradient = d3.scale.cubehelix()
         .range([d3.hsl(270, .75, .35), d3.hsl(70, 1.5, .8)]);
@@ -236,6 +191,53 @@ function initMap(wvar, tvar) {
   //console.log(A.gjPoints.features);
 
   A.labelData = [];
+
+
+  map = mapsense.map('#myMap') // init the map
+    .extent(sfba) // zoom to bounds, regardless of window size
+    .tileSize({x:256,y:256})
+    /*.add(
+        mapsense.basemap().apiKey(my_key).style("parchment")
+    )*/
+    ;
+
+  map.add(mapsense.hash());
+
+  d3.select('.mapsense-attribution').html("");
+
+  map.interact(false);
+  map.add(mapsense.drag());
+  map.add(mapsense.wheel());
+  map.add(mapsense.dblclick());
+  map.add(mapsense.touch());
+  mapsense.compass().map(map); //enable shift zoom
+
+  var max_extents = [
+      {lon: 180, lat: 90}, // opposites, because we'll expand out
+      {lon: -180, lat: -90}
+  ];
+
+  satellite_url = "http://{S}.mqcdn.com/tiles/1.0.0/sat/{Z}/{X}/{Y}.jpg"; // Credit http://developer.mapquest.com/web/products/open/map
+
+  var basemap_url = "http://{S}.basemaps.cartocdn.com/light_all/{Z}/{X}/{Y}.png";
+  var basemap_url = "http://{S}.basemaps.cartocdn.com/light_nolabels/{Z}/{X}/{Y}.png";
+
+  imagery_layer = mapsense.image()
+      .url(mapsense.url(basemap_url)
+      .hosts(["a", "b", "c", "d"]));
+
+  labels_url = "http://stamen-tiles-{S}.a.ssl.fastly.net/toner-labels/{Z}/{X}/{Y}.png";
+  labels_url = "http://{S}.basemaps.cartocdn.com/light_only_labels/{Z}/{X}/{Y}.png";
+
+  labels_layer = mapsense.image()
+      .url(mapsense.url(labels_url)
+      .hosts(["a", "b", "c", "d"]))
+      ;
+
+  map.add(imagery_layer.visible(true).id("imagery_layer"));
+  map.add(labels_layer.visible(true).id("labels_layer"));
+  d3.select("#labels_layer").attr("style","opacity: 0.5;");
+
 
   // Todo - make gj on server
   A.forecast.forEach(function(v){
