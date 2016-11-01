@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function init() {
   initMap("clouds","hourly");
-  //initUI();
+  initUI();
 }
 
 function initUI() {
