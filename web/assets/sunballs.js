@@ -53,9 +53,6 @@ var sfba = [
     {lon: -122.2657, lat: 37.7975}
 ];
 
-var intr = mapsense.interact();
-var arro = mapsense.arrow();
-
 var colorGradient = d3.scale.cubehelix()
         .range([d3.hsl(270, .75, .35), d3.hsl(70, 1.5, .8)]);
 colorGradient.domain([0, 1]);
@@ -106,7 +103,7 @@ var hg = gridX / 2;
 
 
 document.addEventListener("DOMContentLoaded", function(event) {
-  //init();
+  init();
 });
 
 function init() {
@@ -193,6 +190,9 @@ function initMap(wvar, tvar) {
   //console.log(A.gjPoints.features);
 
   A.labelData = [];
+
+  var intr = mapsense.interact();
+  var arro = mapsense.arrow();
 
 
   map = mapsense.map('#myMap') // init the map
