@@ -99,7 +99,7 @@ A.gjRectangles = {
 
 var gridX = 0.015625;
 var gridY = 0.015625;
-var hg = gridX / 2;
+var hg = gridX / 2; // "half grid"
 
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -115,10 +115,10 @@ function initUI() {
 
   d3.select('body')
     .append('div')
-    .attr('class','ui')
+    .attr('class','ui top right')
       .append('select')
       .attr('id','#selectItems')
-      .attr('class','top left')
+      //.attr('class','top right')
       .append('optgroup')
       .selectAll('option')
       .data(A.selectItems)
@@ -142,6 +142,16 @@ function initUI() {
           processJSON(A.rules);
         });
       }*/
+
+  d3.select('body')
+    .append('div')
+    .attr('class','ui top left')
+      .append('button')
+      .attr('id','#animate')
+      .text("Play")
+      .on('click', animate)
+      ;
+
 }
 
 function returnGJRectangle(west, south, east, north, props) {
@@ -243,9 +253,12 @@ function initMap(wvar, tvar) {
 
   // Todo - make gj on server
   A.forecast.forEach(function(v){
-    var props = v;
-    props.sun = 1 - v.hourly[0].clouds;
-    A.gjRectangles.features.push( returnGJRectangle(+v.lon - hg, +v.lat - hg, +v.lon + hg, +v.lat + hg, props) );
+    console.log(v);
+    if (v.hourly && v.hourly[0] && v.hourly[0].clouds) {
+      var props = v;
+      props.sun = 1 - v.hourly[0].clouds;
+      A.gjRectangles.features.push( returnGJRectangle(+v.lon - hg, +v.lat - hg, +v.lon + hg, +v.lat + hg, props) );
+    }
   });
 
   A.gjLayer = mapsense.geoJson()
@@ -267,6 +280,7 @@ function initMap(wvar, tvar) {
           .attr("opacity", 0.5)
           .attr("fill", function(d){
             //console.log(this.parentNode);
+            console.log(d.properties.sun);
             return colorGradient(d.properties.sun);
           })
       })
@@ -292,7 +306,7 @@ function animate() {
           return colorGradient(d.properties.hourly[A.IDX].clouds);
         }
       });
-    A.IDX++;
+    //A.IDX++;
 
     //A.forecast.push( {"lat":"38.00000000","lon":"-122.00000000","hourly":[{"time":1477119600,"clouds":0.05,"precip":0,"wind":3.21,"tempF":59.91,"vis":9.81}]});
 
