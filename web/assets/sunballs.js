@@ -114,20 +114,22 @@ function init() {
 function initUI() {
 
   d3.select('body')
-    .append('select')
-    .attr('id','#selectItems')
-    .attr('class','ui top left')
-    .append('optgroup')
-    .selectAll('option')
-    .data(A.selectItems)
-    .enter()
-    .append('option')
-      .attr('value', function(d) {
-        return d;
-      })
-      .html(function(d) {
-        return d;
-      });
+    .append('div')
+    .attr('class','ui')
+      .append('select')
+      .attr('id','#selectItems')
+      .attr('class','top left')
+      .append('optgroup')
+      .selectAll('option')
+      .data(A.selectItems)
+      .enter()
+      .append('option')
+        .attr('value', function(d) {
+          return d;
+        })
+        .html(function(d) {
+          return d;
+        });
 
 /*  d3.select('#selectItems')
       .on('change', function(v){
