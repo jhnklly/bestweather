@@ -116,7 +116,7 @@ function initUI() {
   d3.select('body')
     .append('select')
     .attr('id','#selectItems')
-    .attr('class','.ui .top .left')
+    .attr('class','ui top left')
     .append('optgroup')
     .selectAll('option')
     .data(A.selectItems)
