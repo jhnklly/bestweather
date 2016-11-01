@@ -21,9 +21,15 @@ var A = {};
 A.IDX = 0;
 
 A.forecast = [];
-
-
 A.nowTime = Math.floor((new Date()).getTime() / 1000);
+
+A.selectItems = [
+  "clouds",
+  "precip",
+  "wind",
+  "tempF",
+  "vis"
+];
 
 A.sw = [-122.3243053,37.5640288];
 A.ne = [-122.2657,37.7975];
@@ -148,6 +154,38 @@ var hg = gridX / 2;
 
 function init() {
   initMap("clouds","hourly");
+  initUI();
+}
+
+function initUI() {
+
+  d3.select('body')
+    .append('select')
+    .attr('id','#selectItems')
+    .attr('class','.ui .top .left')
+    .append('optgroup')
+    .selectAll('option')
+    .data(A.selectItems)
+    .enter()
+    .append('option')
+      .attr('value', function(d) {
+        return d;
+      })
+      .html(function(d) {
+        return d;
+      });
+
+/*  d3.select('#selectItems')
+      .on('change', function(v){
+        formatHash();
+        var fileUrl = A.styleDir + d3.select(this).property('value');
+        d3.json(fileUrl, function(data){
+          console.log(data);
+          document.querySelector('#styleJSON').innerHTML = JSON.stringify(data);
+          A.rules = data.rules;
+          processJSON(A.rules);
+        });
+      }*/
 }
 
 function returnGJRectangle(west, south, east, north, props) {
