@@ -106,7 +106,7 @@ var hg = gridX / 2;
 
 
 document.addEventListener("DOMContentLoaded", function(event) {
-  init();
+  //init();
 });
 
 function init() {
