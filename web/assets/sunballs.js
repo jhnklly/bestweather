@@ -150,7 +150,9 @@ var gridY = 0.015625;
 var hg = gridX / 2;
 
 
+document.addEventListener("DOMContentLoaded", function(event) {
   init();
+});
 
 function init() {
   initMap("clouds","hourly");
