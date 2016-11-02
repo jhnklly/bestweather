@@ -91,7 +91,8 @@ $app->get('/db/', function() use($app) {
       // Get all the points of interest
       //$json_string = file_get_contents("data/sfba_land_pts_64.geojson");
 
-      $url = "https://raw.githubusercontent.com/jhnklly/bestweather/master/web/data/sfba_land_pts_64.geojson";
+      //$url = "https://raw.githubusercontent.com/jhnklly/bestweather/master/web/data/sfba_land_pts_64.geojson";
+      $url = "https://raw.githubusercontent.com/jhnklly/bestweather/master/web/data/bayareaPts.json";
       $ch = curl_init($url);
       $pageurl=strtok($url,'?');
       error_log("pageurl: $pageurl"); // https://api.forecast.io/forecast/86f515c3f0103714bc87cfc7910bcdc5/38,-121,1476985813
@@ -125,7 +126,7 @@ $app->get('/db/', function() use($app) {
       //$names = array();
       foreach ($features as $i => $item) {
           // For every point, get the forecast
-          usleep(1.1 * 1000 * 1000); // microseconds; 923 points = 92 seconds
+          usleep(0.1 * 1000 * 1000); // microseconds; 923 points = 92 seconds
 
           //$rowe[] = array('forecast_json' => $item['geometry']['coordinates'][0]);
           $lat = $item['geometry']['coordinates'][1];
