@@ -125,7 +125,7 @@ $app->get('/db/', function() use($app) {
       //$names = array();
       foreach ($features as $i => $item) {
           // For every point, get the forecast
-          usleep(0.1 * 1000 * 1000); // microseconds; 923 points = 92 seconds
+          usleep(1.1 * 1000 * 1000); // microseconds; 923 points = 92 seconds
 
           //$rowe[] = array('forecast_json' => $item['geometry']['coordinates'][0]);
           $lat = $item['geometry']['coordinates'][1];
