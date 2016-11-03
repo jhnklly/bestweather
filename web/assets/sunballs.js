@@ -173,6 +173,17 @@ function initUI() {
       .on('click', animate)
       ;
 
+  d3.select('body')
+    .append('div')
+    .attr('class','ui bottom left')
+      .append('div')
+      .attr('id','#legend')
+      .text("Legend")
+      .append('div')
+      .text("Date")
+      ;
+
+
 }
 
 function returnGJRectangle(west, south, east, north, props) {
