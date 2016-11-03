@@ -70,7 +70,7 @@ $app->get('/db/', function() use($app) {
 
   date_default_timezone_set('America/Los_Angeles');
   $date = date('Y-m-d', time());
-  //$date = '2016-10-31';
+  $date = '2016-10-23';
   $epochSeconds = time();
   $APIKEY = "86f515c3f0103714bc87cfc7910bcdc5";
   $latLonTime = [38,-121,1476985813];
