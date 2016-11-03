@@ -328,12 +328,12 @@ function initMap(wvar, tvar) {
 function animate() {
   var text = d3.select('#animate').text();
   if (text === "Stop") {
-    clearInterval(si);
+    clearInterval(A.si);
     d3.select('#animate').text("Play");
   } else {
     d3.select('#animate').text("Stop");
 
-    var si = window.setInterval(function() {
+    A.si = window.setInterval(function() {
       // for each feature, update the mapped value
       // must've bound all hourly data to the svg element onload,
       // then just change the fill to the new function
