@@ -179,9 +179,9 @@ function initUI() {
       .append('div')
       .attr('id','legend')
       .text("Legend")
-      .append('div')
-      .attr('id','date')
-      .text("Date")
+        .append('div')
+        .attr('id','date')
+        .text("Date")
       ;
 
 
@@ -342,6 +342,8 @@ function animate() {
         .attr("fill", function(d){
           console.log(A.IDX, d.properties);
           if (d.properties.hourly[A.IDX]) {
+            A.mapEpoch = d.properties.hourly[A.IDX].time;
+            d3.select('#date').text(A.mapEpoch);
             console.log(d.properties.hourly[A.IDX].clouds);
             return colorGradient(d.properties.hourly[A.IDX].clouds);
           }
