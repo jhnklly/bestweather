@@ -314,34 +314,42 @@ function initMap(wvar, tvar) {
 
 
 function animate() {
-  var si = window.setInterval(function() {
-    // for each feature, update the mapped value
-    // must've bound all hourly data to the svg element onload,
-    // then just change the fill to the new function
+  var text = d3.select('#animate').text();
+  if (text === "Stop") {
+    clearInterval(si);
+    d3.select('#animate').text("Play");
+  } else {
+    d3.select('#animate').text("Stop");
 
-    d3.selectAll('.point_highlight')
-      .attr("fill", function(d){
-        console.log(A.IDX, d.properties);
-        if (d.properties.hourly[A.IDX]) {
-          console.log(d.properties.hourly[A.IDX].clouds);
-          return colorGradient(d.properties.hourly[A.IDX].clouds);
-        }
-      });
-    //A.IDX++;
+    var si = window.setInterval(function() {
+      // for each feature, update the mapped value
+      // must've bound all hourly data to the svg element onload,
+      // then just change the fill to the new function
 
-    //A.forecast.push( {"lat":"38.00000000","lon":"-122.00000000","hourly":[{"time":1477119600,"clouds":0.05,"precip":0,"wind":3.21,"tempF":59.91,"vis":9.81}]});
+      d3.selectAll('.point_highlight')
+        .attr("fill", function(d){
+          console.log(A.IDX, d.properties);
+          if (d.properties.hourly[A.IDX]) {
+            console.log(d.properties.hourly[A.IDX].clouds);
+            return colorGradient(d.properties.hourly[A.IDX].clouds);
+          }
+        });
+      //A.IDX++;
 
-    //A.gjRectangles.features[0].properties.hourly[0];
+      //A.forecast.push( {"lat":"38.00000000","lon":"-122.00000000","hourly":[{"time":1477119600,"clouds":0.05,"precip":0,"wind":3.21,"tempF":59.91,"vis":9.81}]});
 
-    /*A.gjRectangles.features.forEach(function(v,i){
-      console.log(A.IDX, v.properties.sun, v.properties.hourly[A.IDX].clouds);
+      //A.gjRectangles.features[0].properties.hourly[0];
 
-      v.properties.sun = v.properties.hourly[A.IDX].clouds;
-    });*/
+      /*A.gjRectangles.features.forEach(function(v,i){
+        console.log(A.IDX, v.properties.sun, v.properties.hourly[A.IDX].clouds);
+
+        v.properties.sun = v.properties.hourly[A.IDX].clouds;
+      });*/
 
 
-    A.IDX = (A.IDX >= A.gjRectangles.features[0].properties.hourly.length - 1) ? 0 : A.IDX + 1;
-  }, 1000);
+      A.IDX = (A.IDX >= A.gjRectangles.features[0].properties.hourly.length - 1) ? 0 : A.IDX + 1;
+    }, 1000);
+  }
 }
 
 
