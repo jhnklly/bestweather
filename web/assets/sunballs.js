@@ -168,7 +168,7 @@ function initUI() {
     .append('div')
     .attr('class','ui top left')
       .append('button')
-      .attr('id','#animate')
+      .attr('id','animate')
       .text("Play")
       .on('click', animate)
       ;
@@ -177,9 +177,10 @@ function initUI() {
     .append('div')
     .attr('class','ui bottom left')
       .append('div')
-      .attr('id','#legend')
+      .attr('id','legend')
       .text("Legend")
       .append('div')
+      .attr('id','date')
       .text("Date")
       ;
 
