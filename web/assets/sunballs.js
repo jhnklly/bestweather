@@ -46,11 +46,11 @@ insert into forecasts (forecast_date, forecast_json, epochseconds, lat, lon) (
 */
 
 A.selectItems = [
-  "clouds",
-  "precip",
-  "wind",
-  "tempF",
-  "vis"
+  { "varname": "clouds", "display": "% Clouds", "max": -Infinity, "min": Infinity, "allVals": [] },
+  { "varname": "precip", "display": "Precipitation", "max": -Infinity, "min": Infinity, "allVals": [] },
+  { "varname": "wind", "display": "Wind", "max": -Infinity, "min": Infinity, "allVals": [] },
+  { "varname": "tempF", "display": "Temperature", "max": -Infinity, "min": Infinity, "allVals": [] },
+  { "varname": "vis", "display": "Visibility", "max": -Infinity, "min": Infinity, "allVals": [] }
 ];
 
 A.sw = [-122.3243053,37.5640288];
@@ -128,11 +128,32 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 function init() {
-  initMap("clouds","hourly");
+  initBaseMap();
+  updateMap("clouds","hourly");
   initUI();
 }
 
+function findMaxMin() {
+  // Go thr all location, all hours, for each varname
+  A.forecast.forEach(function(loc){
+    loc.hourly.forEach(function(hr){
+      A.selectItems.forEach(function(v){
+        v.allVals.push(hr[v.varname]);
+      });
+    });
+  });
+
+  A.selectItems.forEach(function(v){
+    v.max = _.max(v.allVals);
+    v.min = _.min(v.allVals);
+    console.log(v.varname, v.min, v.max);
+  });
+
+}
+
 function initUI() {
+
+  findMaxMin();
 
   d3.select('body')
     .append('div')
@@ -146,23 +167,18 @@ function initUI() {
       .enter()
       .append('option')
         .attr('value', function(d) {
-          return d;
+          return d.varname;
         })
         .html(function(d) {
-          return d;
+          return d.display;
         });
 
-/*  d3.select('#selectItems')
+  d3.select('#selectItems')
       .on('change', function(v){
-        formatHash();
-        var fileUrl = A.styleDir + d3.select(this).property('value');
-        d3.json(fileUrl, function(data){
-          console.log(data);
-          document.querySelector('#styleJSON').innerHTML = JSON.stringify(data);
-          A.rules = data.rules;
-          processJSON(A.rules);
-        });
-      }*/
+        //formatHash();
+        A.wvar = d3.select(this).property('value');
+        updateMap(A.wvar,"hourly");
+      });
 
   d3.select('body')
     .append('div')
@@ -172,6 +188,14 @@ function initUI() {
       .text("Play")
       .on('click', animate)
       ;
+
+A.formatTime = d3.timeFormat("%B %d, %Y ");
+A.formatTime = d3.timeFormat("%x %X");
+A.formatDate = d3.timeFormat("%x");
+A.formatDay = d3.timeFormat("%a");
+A.formatHour = d3.timeFormat("%I");
+A.formatAMPM = d3.timeFormat("%p");
+//formatTime(new Date); // "June 30, 2015"
 
   d3.select('body')
     .append('div')
@@ -187,47 +211,8 @@ function initUI() {
 
 }
 
-function returnGJRectangle(west, south, east, north, props) {
-  var properties = props || {};
 
-  var polygonFeature = {
-    "type": "Feature",
-    "properties": properties,
-    "geometry": {
-      "type": "Polygon",
-      "coordinates": [
-          []
-      ]
-    }
-  };
-
-  var coordArr = polygonFeature.geometry.coordinates[0];
-  coordArr.push([west, south]);
-  coordArr.push([west, north]);
-  coordArr.push([east, north]);
-  coordArr.push([east, south]);
-  coordArr.push([west, south]);
-
-  return polygonFeature;
-}
-
-function returnGJPoint(lon, lat, props) {
-  var properties = props || {};
-
-  var feature = {
-    "type": "Feature",
-    "properties": properties,
-    "geometry": {
-      "type": "Point",
-      "coordinates": [lon, lat]
-    }
-  };
-
-  return feature;
-}
-
-
-function initMap(wvar, tvar) {
+function initBaseMap() {
   //A.gjPoints = data;
   //A.gjRectangles = pointGridToRectangles(data);
   //console.log(A.gjPoints.features);
@@ -284,9 +269,13 @@ function initMap(wvar, tvar) {
   d3.select("#labels_layer").attr("style","opacity: 0.5;");
 
 
+}
+
+function updateMap(wvar, tvar) {
+
   // Todo - make gj on server
   A.forecast.forEach(function(v){
-    console.log(v);
+    //console.log(v);
     if (v.hourly && v.hourly[0] && v.hourly[0].clouds) {
       var props = v;
       props.sun = 1 - v.hourly[0].clouds;
@@ -313,8 +302,9 @@ function initMap(wvar, tvar) {
           .attr("opacity", 0.5)
           .attr("fill", function(d){
             //console.log(this.parentNode);
-            console.log(d.properties.sun);
-            return colorGradient(d.properties.sun);
+            console.log(d.properties[wvar], d.properties.hourly[0][wvar]);
+            return colorGradient(d.properties.hourly[0][wvar]);
+            //return colorGradient(d.properties.sun);
           })
       })
       //.on("load", load)
@@ -340,12 +330,18 @@ function animate() {
 
       d3.selectAll('.point_highlight')
         .attr("fill", function(d){
-          console.log(A.IDX, d.properties);
+          //console.log(A.IDX, d.properties);
           if (d.properties.hourly[A.IDX]) {
             A.mapEpoch = d.properties.hourly[A.IDX].time;
-            d3.select('#date').text(A.mapEpoch);
-            console.log(d.properties.hourly[A.IDX].clouds);
-            return colorGradient(d.properties.hourly[A.IDX].clouds);
+
+            var date = A.formatDate(A.mapEpoch*1000);
+            var day = A.formatDay(A.mapEpoch*1000);
+            var hr = parseInt(A.formatHour(A.mapEpoch*1000), 10);
+            var ampm = A.formatAMPM(A.mapEpoch*1000);
+
+            d3.select('#date').text( [day,date,hr,ampm].join(" ") );
+            //console.log(d.properties.hourly[A.IDX].clouds);
+            return colorGradient(d.properties.hourly[A.IDX][A.wvar]);
           }
         });
       //A.IDX++;
@@ -434,3 +430,41 @@ function copyJSON(json) {
   return JSON.parse(JSON.stringify(json));
 }
 
+function returnGJRectangle(west, south, east, north, props) {
+  var properties = props || {};
+
+  var polygonFeature = {
+    "type": "Feature",
+    "properties": properties,
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [
+          []
+      ]
+    }
+  };
+
+  var coordArr = polygonFeature.geometry.coordinates[0];
+  coordArr.push([west, south]);
+  coordArr.push([west, north]);
+  coordArr.push([east, north]);
+  coordArr.push([east, south]);
+  coordArr.push([west, south]);
+
+  return polygonFeature;
+}
+
+function returnGJPoint(lon, lat, props) {
+  var properties = props || {};
+
+  var feature = {
+    "type": "Feature",
+    "properties": properties,
+    "geometry": {
+      "type": "Point",
+      "coordinates": [lon, lat]
+    }
+  };
+
+  return feature;
+}
