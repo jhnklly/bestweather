@@ -16,6 +16,13 @@ components:
     https://www.wunderground.com/q/zmw:94114.1.99999?sp=KCASANFR943
   C. Legend
   D. Animate: play/pause
+
+colorGradient min/max based on...
+- entire time period?
+- snapshot?
+- entire area?
+- visible extent?
+
 */
 var A = {};
 A.IDX = 0;
