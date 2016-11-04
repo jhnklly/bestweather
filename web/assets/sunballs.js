@@ -53,6 +53,8 @@ A.selectItems = [
   { "varname": "vis", "display": "Visibility", "max": -Infinity, "min": Infinity, "allVals": [] }
 ];
 
+A.wvar = "clouds";
+
 A.sw = [-122.3243053,37.5640288];
 A.ne = [-122.2657,37.7975];
 A.boundsData = [A.sw, A.ne];
@@ -77,18 +79,19 @@ var sfba = [
 var colorGradient = d3.scale.cubehelix()
         .range([d3.hsl(270, .75, .35), d3.hsl(70, 1.5, .8)]);
 colorGradient.domain([0, 1]);
+A.ext_color_domain = [0, 0.2, 0.4, 0.6, 0.8, 1];
 
 function updateLegend() {
   var width = 960,
   height = 500;
 
-  var ext_color_domain = [0, 0.2, 0.4, 0.6, 0.8, 1];
-  var legend_labels = ["< 50", "50+", "150+", "350+", "750+", "> 1500"];
-  var legend_labels = ext_color_domain;
+  d3.selectAll('.legend').remove();
+  //var legend_labels = ["< 50", "50+", "150+", "350+", "750+", "> 1500"];
+  var legend_labels = A.ext_color_domain;
 
   var legend = d3.select('svg')
   .selectAll("g.legend")
-  .data(ext_color_domain)
+  .data(A.ext_color_domain)
   .enter()
   .append("g")
   .attr("class", "legend");
@@ -104,6 +107,7 @@ function updateLegend() {
   .style("opacity", 0.8);
 
   legend.append("text")
+  .attr("class", "legend-text")
   .attr("x", 50)
   .attr("y", function(d, i){ return height - (i*ls_h) - ls_h - 4;})
   .text(function(d, i){ return legend_labels[i]; });
@@ -129,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function init() {
   initBaseMap();
-  updateMap("clouds","hourly");
+  initOverlayMap("clouds","hourly");
   initUI();
 }
 
@@ -159,7 +163,7 @@ function initUI() {
     .append('div')
     .attr('class','ui top right')
       .append('select')
-      .attr('id','#selectItems')
+      .attr('id','selectItems')
       //.attr('class','top right')
       .append('optgroup')
       .selectAll('option')
@@ -173,11 +177,29 @@ function initUI() {
           return d.display;
         });
 
+
   d3.select('#selectItems')
       .on('change', function(v){
         //formatHash();
-        A.wvar = d3.select(this).property('value');
-        updateMap(A.wvar,"hourly");
+        var min, max;
+        //A.wvar = d3.select(this).property('value');
+        A.wvar = d3.select('#selectItems').property('value');
+        A.selectItems.forEach(function(v){
+          if (v.varname === A.wvar) {
+            min = v.min;
+            max = v.max;
+          }
+        });
+
+        A.ext_color_domain = [];
+        var minMaxRange = max - min;
+        for (var i = 0; i < 6; i++) {
+          A.ext_color_domain.push(d3.round(min + i * minMaxRange/6, 1));
+        }
+
+        colorGradient.domain([min, max]);
+        refreshMap(A.wvar,"hourly");
+        updateLegend();
       });
 
   d3.select('body')
@@ -189,23 +211,12 @@ function initUI() {
       .on('click', animate)
       ;
 
-A.formatTime = d3.timeFormat("%B %d, %Y ");
-A.formatTime = d3.timeFormat("%x %X");
-A.formatDate = d3.timeFormat("%x");
-A.formatDay = d3.timeFormat("%a");
-A.formatHour = d3.timeFormat("%I");
-A.formatAMPM = d3.timeFormat("%p");
-//formatTime(new Date); // "June 30, 2015"
-
   d3.select('body')
     .append('div')
     .attr('class','ui bottom left')
       .append('div')
-      .attr('id','legend')
-      .text("Legend")
-        .append('div')
-        .attr('id','date')
-        .text("Date")
+      .attr('id','date')
+      .text("Date")
       ;
 
 
@@ -268,10 +279,10 @@ function initBaseMap() {
   map.add(labels_layer.visible(true).id("labels_layer"));
   d3.select("#labels_layer").attr("style","opacity: 0.5;");
 
-
 }
 
-function updateMap(wvar, tvar) {
+function initOverlayMap(wvar, tvar) {
+  updateLegend();
 
   // Todo - make gj on server
   A.forecast.forEach(function(v){
@@ -287,33 +298,44 @@ function updateMap(wvar, tvar) {
       .features(A.gjRectangles.features)
       .selection(function(d){
           d.attr("class", "point_highlight")
-          d.attr("id", function(d,i){
-            //A.idCnt++;
-            //return "id-" + A.idCnt;
+          .attr("id", function(d,i){
             var txt_data = {
-              //"id": this.parentNode.getAttribute("id"),
               "id": "id-" + i,
               "data": d
-            }
+            };
             A.labelData.push(txt_data);
             return "id-" + i;
           })
           //.attr("r", "7")
           .attr("opacity", 0.5)
           .attr("fill", function(d){
-            //console.log(this.parentNode);
             console.log(d.properties[wvar], d.properties.hourly[0][wvar]);
             return colorGradient(d.properties.hourly[0][wvar]);
-            //return colorGradient(d.properties.sun);
-          })
+          });
       })
       //.on("load", load)
       ;
   map.add(A.gjLayer);
 
-};
+}
 
+function refreshMap(wvar, tvar) {
+  d3.selectAll('.point_highlight')
+    .attr("fill", function(d){
+      if (d.properties.hourly[A.IDX]) {
+        return colorGradient(d.properties.hourly[A.IDX][A.wvar]);
+      }
+    });
+}
 
+function formatTime(epoch) {
+  var date = A.formatDate(A.mapEpoch*1000);
+  var day = A.formatDay(A.mapEpoch*1000);
+  var hr = parseInt(A.formatHour(A.mapEpoch*1000), 10);
+  var ampm = A.formatAMPM(A.mapEpoch*1000);
+  var timeText = [day,date,hr,ampm].join(" ");
+  return timeText;
+}
 
 function animate() {
   var text = d3.select('#animate').text();
@@ -330,17 +352,11 @@ function animate() {
 
       d3.selectAll('.point_highlight')
         .attr("fill", function(d){
-          //console.log(A.IDX, d.properties);
+          console.log(A.IDX, d.properties);
           if (d.properties.hourly[A.IDX]) {
             A.mapEpoch = d.properties.hourly[A.IDX].time;
-
-            var date = A.formatDate(A.mapEpoch*1000);
-            var day = A.formatDay(A.mapEpoch*1000);
-            var hr = parseInt(A.formatHour(A.mapEpoch*1000), 10);
-            var ampm = A.formatAMPM(A.mapEpoch*1000);
-
-            d3.select('#date').text( [day,date,hr,ampm].join(" ") );
-            //console.log(d.properties.hourly[A.IDX].clouds);
+            var timeText = formatTime(A.mapEpoch);
+            d3.select('#date').text( timeText );
             return colorGradient(d.properties.hourly[A.IDX][A.wvar]);
           }
         });
@@ -468,3 +484,12 @@ function returnGJPoint(lon, lat, props) {
 
   return feature;
 }
+
+
+A.formatTime = d3.timeFormat("%B %d, %Y ");
+A.formatTime = d3.timeFormat("%x %X");
+A.formatDate = d3.timeFormat("%x");
+A.formatDay = d3.timeFormat("%a");
+A.formatHour = d3.timeFormat("%I");
+A.formatAMPM = d3.timeFormat("%p");
+//formatTime(new Date); // "June 30, 2015"
