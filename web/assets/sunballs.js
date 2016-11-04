@@ -53,11 +53,11 @@ insert into forecasts (forecast_date, forecast_json, epochseconds, lat, lon) (
 */
 
 A.selectItems = [
-  { "varname": "clouds", "display": "% Clouds", "max": -Infinity, "min": Infinity, "allVals": [] },
-  { "varname": "precip", "display": "Precipitation", "max": -Infinity, "min": Infinity, "allVals": [] },
-  { "varname": "wind", "display": "Wind", "max": -Infinity, "min": Infinity, "allVals": [] },
-  { "varname": "tempF", "display": "Temperature", "max": -Infinity, "min": Infinity, "allVals": [] },
-  { "varname": "vis", "display": "Visibility", "max": -Infinity, "min": Infinity, "allVals": [] }
+  {"varname": "clouds", "display": "% Clouds", "max": -Infinity, "min": Infinity, "allVals": [] },
+  {"varname": "precip", "display": "Precipitation", "max": -Infinity, "min": Infinity, "allVals": [] },
+  {"varname": "wind", "display": "Wind", "max": -Infinity, "min": Infinity, "allVals": [] },
+  {"varname": "tempF", "display": "Temperature", "max": -Infinity, "min": Infinity, "allVals": [] },
+  {"varname": "vis", "display": "Visibility", "max": -Infinity, "min": Infinity, "allVals": [] }
 ];
 
 A.wvar = "clouds";
@@ -96,7 +96,19 @@ function updateLegend() {
   //var legend_labels = ["< 50", "50+", "150+", "350+", "750+", "> 1500"];
   var legend_labels = A.ext_color_domain;
 
+  var legendContainer = d3.select('body')
+    .append('div')
+    .attr('id','legend')
+    .attr('class','ui top left')
+    //.attr('style','ui top left')
+      .append('svg')
+      .attr('id','legend-svg')
+    ;
+
+
+  //legend.selectAll("g.legend")
   var legend = d3.select('svg')
+  //var legend = d3.select('#legend-svg')
   .selectAll("g.legend")
   .data(A.ext_color_domain)
   .enter()
@@ -118,6 +130,18 @@ function updateLegend() {
   .attr("x", 50)
   .attr("y", function(d, i){ return height - (i*ls_h) - ls_h - 4;})
   .text(function(d, i){ return legend_labels[i]; });
+
+  legend.append("div")
+    .append('label')
+    //.attr('for',function(d,i){ return 'a'+i; })
+    .text("Scale by visible data")
+      .append("input")
+      .attr("checked", true)
+      .attr("type", "checkbox")
+      .attr("id", function(d,i) { return 'a'+i; })
+      .attr("onClick", "change(this)")
+    ;
+
 
 }
 
